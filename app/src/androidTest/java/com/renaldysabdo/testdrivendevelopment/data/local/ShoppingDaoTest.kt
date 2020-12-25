@@ -66,11 +66,26 @@ class ShoppingDaoTest {
         val shoppingItem = ShoppingItem(
             "name", 1, 1f, "url", id = 1
         )
+        dao.insertShoppingItem(shoppingItem)
 
         dao.deleteShoppingItem(shoppingItem)
-
         val allObserveItem = dao.observeAllShoppingItems().getOrAwaitValue()
+        assertThat(allObserveItem).doesNotContain(shoppingItem)
+    }
 
-        assertThat(allObserveItem).isEmpty()
+    @Test
+    fun observeTotalPrice() = runBlockingTest {
+        val shoppingItem1 = ShoppingItem("alpha", 1, 9f, "url", id = 1)
+        val shoppingItem2 = ShoppingItem("beta", 20, 1000f, "url", id = 2)
+        val shoppingItem3 = ShoppingItem("charlie", 0, 4000f, "url", id = 3)
+
+        dao.insertShoppingItem(shoppingItem1)
+        dao.insertShoppingItem(shoppingItem2)
+        dao.insertShoppingItem(shoppingItem3)
+
+        val total = dao.observeTotalPrice().getOrAwaitValue()
+
+        assertThat(total).isEqualTo(1 * 9f + 20 * 1000f)
+
     }
 }
