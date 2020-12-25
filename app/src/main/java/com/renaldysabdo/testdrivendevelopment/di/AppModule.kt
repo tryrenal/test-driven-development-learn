@@ -2,10 +2,13 @@ package com.renaldysabdo.testdrivendevelopment.di
 
 import android.content.Context
 import androidx.room.Room
+import com.renaldysabdo.testdrivendevelopment.data.local.ShoppingDao
 import com.renaldysabdo.testdrivendevelopment.data.local.ShoppingItemDatabase
 import com.renaldysabdo.testdrivendevelopment.data.remote.ApiService
 import com.renaldysabdo.testdrivendevelopment.other.Constanta.BASE_URL
 import com.renaldysabdo.testdrivendevelopment.other.Constanta.DATABASE_NAME
+import com.renaldysabdo.testdrivendevelopment.repositories.ShopRepository
+import com.renaldysabdo.testdrivendevelopment.repositories.ShopRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +29,13 @@ object AppModule {
     ) = Room.databaseBuilder(
         context, ShoppingItemDatabase::class.java, DATABASE_NAME
     ).build()
+
+    @Provides
+    @Singleton
+    fun provideRepository(
+        shopDao : ShoppingDao,
+        api : ApiService
+    ) = ShopRepositoryImp(shopDao, api) as ShopRepository
 
     @Provides
     @Singleton
