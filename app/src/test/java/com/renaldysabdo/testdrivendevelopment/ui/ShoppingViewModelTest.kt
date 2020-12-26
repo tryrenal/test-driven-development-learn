@@ -2,17 +2,23 @@ package com.renaldysabdo.testdrivendevelopment.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.renaldysabdo.testdrivendevelopment.MainCoroutineRule
 import com.renaldysabdo.testdrivendevelopment.getOrAwaitValueTest
 import com.renaldysabdo.testdrivendevelopment.other.Constanta
 import com.renaldysabdo.testdrivendevelopment.other.Status
 import com.renaldysabdo.testdrivendevelopment.repositories.FakeShopRepositoryImp
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 
+@ExperimentalCoroutinesApi
 class ShoppingViewModelTest {
 
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+     
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
