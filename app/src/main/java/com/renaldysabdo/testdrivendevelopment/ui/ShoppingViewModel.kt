@@ -81,7 +81,19 @@ class ShoppingViewModel @ViewModelInject constructor(
     }
 
     fun searchImageQuery(query: String){
-
+        if (query.isEmpty()){
+            _images.postValue(Event(Resource.error("not valid image query", null)))
+            return
+        }
+        try {
+            viewModelScope.launch {
+                val response = repository.searchImageItem(query)
+                _images.postValue(Event(response))
+            }
+        }catch (e: Exception){
+            _images.postValue(Event(Resource.error(e.message.toString(), null)))
+            return
+        }
     }
 
 

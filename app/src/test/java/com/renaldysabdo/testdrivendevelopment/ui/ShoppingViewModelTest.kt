@@ -18,7 +18,7 @@ class ShoppingViewModelTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
-     
+
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -28,6 +28,8 @@ class ShoppingViewModelTest {
     fun setup(){
         viewModel = ShoppingViewModel(FakeShopRepositoryImp())
     }
+
+    //create shopping item model - viewModel
 
     @Test
     fun `insert with empty field, return false`(){
@@ -83,6 +85,24 @@ class ShoppingViewModelTest {
         viewModel.createShoppingItem("name", "1", "1.0")
         val value = viewModel.shoppingItemStatus.getOrAwaitValueTest()
 
+        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    //search image - viewModel
+
+    @Test
+    fun `search image with empty field, return false`(){
+        viewModel.searchImageQuery("")
+
+        val value = viewModel.images.getOrAwaitValueTest()
+        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun `search image valid`(){
+        viewModel.searchImageQuery("banana")
+
+        val value = viewModel.images.getOrAwaitValueTest()
         assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
