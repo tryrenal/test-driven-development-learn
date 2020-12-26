@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.renaldysabdo.testdrivendevelopment.data.local.ShoppingItem
 import com.renaldysabdo.testdrivendevelopment.data.remote.responses.ImageResponse
+import com.renaldysabdo.testdrivendevelopment.other.Constanta
 import com.renaldysabdo.testdrivendevelopment.other.Event
 import com.renaldysabdo.testdrivendevelopment.other.Resource
 import com.renaldysabdo.testdrivendevelopment.repositories.ShopRepository
@@ -43,8 +44,40 @@ class ShoppingViewModel @ViewModelInject constructor(
         repository.insertShoppingItem(item)
     }
 
-    fun createShoppingItem(name: String, amount: String, price: String){
+    fun createShoppingItem(name: String, amountString: String, priceString: String){
+        if (name.isEmpty() || amountString.isEmpty() || priceString.isEmpty()){
+            _shoppingItemStatus.postValue(Event(Resource.error("empty field", null)))
+            return
+        }
 
+        if (name.length > Constanta.MAX_NAME_LENGTH){
+            _shoppingItemStatus.postValue(Event(Resource.error("long name", null)))
+            return
+        }
+
+        if (priceString.length > Constanta.MAX_PRICE_LENGTH){
+            _shoppingItemStatus.postValue(Event(Resource.error("long price",null)))
+            return
+        }
+
+        val amount = try {
+            amountString.toInt()
+        } catch (e: Exception){
+            _shoppingItemStatus.postValue(Event(Resource.error("not valid amount", null)))
+            return
+        }
+
+        val price = try {
+            priceString.toFloat()
+        } catch (e: Exception){
+            _shoppingItemStatus.postValue(Event(Resource.error("not valid price", null)))
+            return
+        }
+
+        val items = ShoppingItem(name, amount, price, _curImage.value ?: "")
+        insertShoppingItemToDb(items)
+        setCurImageUrl("")
+        _shoppingItemStatus.postValue(Event(Resource.success(items)))
     }
 
     fun searchImageQuery(query: String){
