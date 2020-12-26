@@ -8,6 +8,8 @@ import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import com.renaldysabdo.testdrivendevelopment.HiltTestRunner
 import com.renaldysabdo.testdrivendevelopment.getOrAwaitValue
+import com.renaldysabdo.testdrivendevelopment.launchFragmentInHiltContainer
+import com.renaldysabdo.testdrivendevelopment.ui.fragment.ShoppingFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,6 +59,13 @@ class ShoppingDaoTest {
     @After
     fun tearDown(){
         database.close()
+    }
+
+    @Test
+    fun testLaunchFragmentInHiltContainer(){
+        launchFragmentInHiltContainer<ShoppingFragment> {
+
+        }
     }
 
     //runBlockingTest = untuk mendelay dan membuat hasil berjalan pada satu thread
