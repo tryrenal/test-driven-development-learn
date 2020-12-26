@@ -106,4 +106,23 @@ class ShoppingViewModelTest {
         assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
+    //set current image - viewModel
+
+    @Test
+    fun `set current image with empty, return empty`(){
+        viewModel.setCurImageUrl("")
+
+        val value = viewModel.curImage.getOrAwaitValueTest()
+        assertThat(value).isEmpty()
+    }
+
+    @Test
+    fun `set current image with url image, return url`(){
+        val urlImage = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fsproutsocial.com%2Finsights%2Fsocial-media-image-sizes-guide%2F&psig=AOvVaw1foxMWlWTlGFRovwhWZ6s5&ust=1609049254776000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCND829396u0CFQAAAAAdAAAAABAD"
+        viewModel.setCurImageUrl(urlImage)
+
+        val value = viewModel.curImage.getOrAwaitValueTest()
+
+        assertThat(value).isEqualTo(urlImage)
+    }
 }

@@ -96,5 +96,4 @@ class ShoppingViewModel @ViewModelInject constructor(
         }
     }
 
-
 }
