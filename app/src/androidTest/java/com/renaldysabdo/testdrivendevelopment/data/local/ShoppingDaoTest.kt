@@ -61,13 +61,6 @@ class ShoppingDaoTest {
         database.close()
     }
 
-    @Test
-    fun testLaunchFragmentInHiltContainer(){
-        launchFragmentInHiltContainer<ShoppingFragment> {
-
-        }
-    }
-
     //runBlockingTest = untuk mendelay dan membuat hasil berjalan pada satu thread
     @Test
     fun insertShoppingItem() = runBlockingTest {
