@@ -16,7 +16,7 @@ import com.renaldysabdo.testdrivendevelopment.ui.ShoppingViewModel
 import javax.inject.Inject
 
 class ImagePickFragment @Inject constructor(
-        private val imageAdapter: ImageAdapter
+        val imageAdapter: ImageAdapter
 ): Fragment(R.layout.fragment_image_pick) {
 
     lateinit var shopViewModel : ShoppingViewModel

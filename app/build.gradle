@@ -128,4 +128,6 @@ dependencies {
 
     //hilt test fragment - in debug source set
     debugImplementation "androidx.fragment:fragment-testing:1.3.0-alpha08"
+
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.3.0"
 }
