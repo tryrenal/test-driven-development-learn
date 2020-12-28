@@ -58,7 +58,5 @@ class ImageAdapter @Inject constructor(
         return images.size
     }
 
-    class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-
-    }
+    class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 }
