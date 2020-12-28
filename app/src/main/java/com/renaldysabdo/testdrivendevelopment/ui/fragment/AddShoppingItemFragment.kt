@@ -9,11 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.RequestManager
 import com.renaldysabdo.testdrivendevelopment.R
 import com.renaldysabdo.testdrivendevelopment.databinding.FragmentAddShoppingItemBinding
 import com.renaldysabdo.testdrivendevelopment.ui.ShoppingViewModel
+import javax.inject.Inject
 
-class AddShoppingItemFragment : Fragment(R.layout.fragment_add_shopping_item) {
+class AddShoppingItemFragment @Inject constructor(
+    val glide : RequestManager
+) : Fragment(R.layout.fragment_add_shopping_item) {
 
     lateinit var shopViewModel : ShoppingViewModel
 
