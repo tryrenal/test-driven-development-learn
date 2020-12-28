@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
+import com.google.android.material.snackbar.Snackbar
 import com.renaldysabdo.testdrivendevelopment.R
 import com.renaldysabdo.testdrivendevelopment.databinding.FragmentAddShoppingItemBinding
+import com.renaldysabdo.testdrivendevelopment.other.Status
 import com.renaldysabdo.testdrivendevelopment.ui.ShoppingViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class AddShoppingItemFragment @Inject constructor(
@@ -27,7 +29,7 @@ class AddShoppingItemFragment @Inject constructor(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAddShoppingItemBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,6 +37,16 @@ class AddShoppingItemFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         shopViewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
+
+        subscribeToObservers()
+
+        binding.btnAddShoppingItem.setOnClickListener {
+            shopViewModel.createShoppingItem(
+                binding.etShoppingItemName.text.toString(),
+                binding.etShoppingItemAmount.text.toString(),
+                binding.etShoppingItemPrice.text.toString()
+            )
+        }
 
         binding.ivShoppingImage.setOnClickListener {
             findNavController().navigate(
@@ -50,5 +62,28 @@ class AddShoppingItemFragment @Inject constructor(
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
+    }
+
+    private fun subscribeToObservers(){
+        shopViewModel.curImage.observe(viewLifecycleOwner, {
+            glide.load(it).into(binding.ivShoppingImage)
+        })
+
+        shopViewModel.shoppingItemStatus.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { result ->
+                when(result.status){
+                    Status.SUCCESS -> {
+                        Snackbar.make(requireActivity().rootLayout, "added shopping item", Snackbar.LENGTH_LONG).show()
+                        findNavController().popBackStack()
+                    }
+                    Status.ERROR -> {
+                        Snackbar.make(requireActivity().rootLayout, result.message ?: "unknown error", Snackbar.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+                        //loading
+                    }
+                }
+            }
+        })
     }
 }
